@@ -47,41 +47,63 @@ export declare interface RouterModalOutletComponent {
   statusChanges: EventEmitter<any>;
 }
 
-export abstract class RouterModalOkCancel {
+export class RouterModal {
+    private _modalTitle: string;
+    public readonly modalTitleChanges = new EventEmitter<any>();
+    private _modalClass: string;
+    public readonly modalClassChanges = new EventEmitter<any>();
+    @Input()
+    get modalTitle(): string {
+      return this._modalTitle;
+    }
+    set modalTitle(value: string) {
+      this._modalTitle = value;
+      this.modalTitleChanges.emit(this._modalTitle);
+    }
+
+  @Input()
+  get modalClass(): string {
+    return this._modalClass;
+  }
+  set modalClass(value: string) {
+    this._modalClass = value;
+    this.modalClassChanges.emit(this._modalTitle);
+  }
+    public readonly statusChanges = new EventEmitter<any>();
+}
+
+export abstract class RouterModalOkCancel extends RouterModal {
   @Input() okButtonText = ButtonTypes.ok.buttonText;
   @Input() okButtonClass = ButtonTypes.ok.buttonClass;
   @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
   @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
-  public readonly statusChanges = new EventEmitter<any>();
   abstract ok(): Promise<any>;
   abstract cancel(): Promise<any>;
 }
 
 // noinspection JSUnusedGlobalSymbols
-export abstract class RouterModalYesNoCancel {
+export abstract class RouterModalYesNoCancel extends RouterModal {
   @Input() yesButtonText = ButtonTypes.yes.buttonText;
   @Input() yesButtonClass = ButtonTypes.yes.buttonClass;
   @Input() noButtonText = ButtonTypes.no.buttonText;
   @Input() noButtonClass = ButtonTypes.ignore.buttonClass;
   @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
   @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
-  public readonly statusChanges = new EventEmitter<any>();
   abstract yes(): Promise<any>;
   abstract no(): Promise<any>;
   abstract cancel(): Promise<any>;
 }
 
-export abstract class RouterModalYesNo {
+export abstract class RouterModalYesNo extends RouterModal {
   @Input() yesButtonText = ButtonTypes.yes.buttonText;
   @Input() yesButtonClass = ButtonTypes.yes.buttonClass;
   @Input() noButtonText = ButtonTypes.no.buttonText;
   @Input() noButtonClass = ButtonTypes.no.buttonClass;
-  public readonly statusChanges = new EventEmitter<any>();
   abstract yes(): Promise<any>;
   abstract no(): Promise<any>;
 }
 
-export abstract class RouterModalAbortRetryIgnore {
+export abstract class RouterModalAbortRetryIgnore extends RouterModal {
   public readonly statusChanges = new EventEmitter<any>();
   @Input() abortButtonText = ButtonTypes.abort.buttonText;
   @Input() abortButtonClass = ButtonTypes.abort.buttonClass;
@@ -146,8 +168,8 @@ export abstract class RouterModalAbortRetryIgnore {
         display: block;
         }
         .bd-modal .modal .modal-body {
-                margin-top: 0rem;
-                margin-bottom: 0rem;
+                margin-top: 0;
+                margin-bottom: 0;
           }
         .bd-modal .modal.modal-waiting {
             opacity: 0.6;
@@ -159,6 +181,8 @@ export class RouterModalComponent {
 
   private componentReference: any;
   private componentStatusChanges: Subscription;
+  private componentTitleChanges: Subscription;
+  private componentClassChanges: Subscription;
   public waiting = false;
   @Input() modalTitle = '';
   @Input() modalClass: string;
@@ -357,8 +381,17 @@ export class RouterModalComponent {
               if (this.instanceButtons.yes) {
                 this.instanceButtons.yes.buttonDisabled = status.invalid;
               }
-
           });
+      }
+      if (this.componentReference.modalTitleChanges) {
+        this.componentTitleChanges = this.componentReference.modalTitleChanges.subscribe( title => {
+          this.modalInstanceTitle = title;
+        });
+      }
+      if (this.componentReference.modalClassChanges) {
+        this.componentClassChanges = this.componentReference.modalClassChanges.subscribe( title => {
+          this.modalInstanceClass = title;
+        });
       }
       const outletComponentReference = (<RouterModalOutletComponent> this.componentReference);
       // get title
@@ -417,6 +450,12 @@ export class RouterModalComponent {
 
   // noinspection JSUnusedLocalSymbols
   onDeactivate(event) {
+    if (this.componentTitleChanges) {
+      this.componentTitleChanges.unsubscribe();
+    }
+    if (this.componentClassChanges) {
+      this.componentClassChanges.unsubscribe();
+    }
     if (this.componentStatusChanges) {
       this.componentStatusChanges.unsubscribe();
     }
