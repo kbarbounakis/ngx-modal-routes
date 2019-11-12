@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NgForm} from '@angular/forms';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'modal1',
+  selector: 'demo-modal1',
   templateUrl: './modal1.component.html',
   styles: [`
   `]

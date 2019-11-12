@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "types": [],
+    "paths": {
+      "ngx-modals": [
+        "packages/modals/src/public_api"
+      ],
+      "ngx-modals/*": [
+        "packages/modals/src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

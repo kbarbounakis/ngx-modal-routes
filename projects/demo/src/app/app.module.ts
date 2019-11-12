@@ -13,7 +13,7 @@ import { Edit1Component } from './components/edit1.component';
 import { AppRoutingModule } from './app.routing';
 
 import { AppLayoutComponent } from './app-layout.component';
-import {RouterModalModule} from '../../projects/modals/src/lib/router-modal.module';
+import {RouterModalModule} from '../../../modals/src/public_api';
 
 @NgModule({
   imports: [

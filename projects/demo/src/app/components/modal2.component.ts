@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { RouterModalOkCancel } from '../../../projects/modals/src/public_api';
+import { RouterModalOkCancel } from '../../../../modals/src/public_api';
 import {ActivatedRoute, Router} from '@angular/router';
 @Component({
-  selector: 'modal2',
+  selector: 'demo-modal2',
   templateUrl: './modal2.component.html',
   styles: [`
   `]

@@ -1,11 +1,19 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "paths": {
+      "ngx-modals": [
+        "packages/modals/src/public_api"
+      ],
+      "ngx-modals/*": [
+        "packages/modals/src/*"
+      ]
+    }
   },
   "files": [
     "test.ts",

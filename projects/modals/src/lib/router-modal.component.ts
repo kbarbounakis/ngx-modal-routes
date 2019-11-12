@@ -159,7 +159,7 @@ export class RouterModalComponent {
 
   private componentReference: any;
   private componentStatusChanges: Subscription;
-  private waiting = false;
+  public waiting = false;
   @Input() modalTitle = '';
   @Input() modalClass: string;
 
@@ -186,12 +186,12 @@ export class RouterModalComponent {
   @Input() ignoreButtonText = ButtonTypes.ignore.buttonText;
   @Input() ignoreButtonClass = ButtonTypes.ignore.buttonClass;
 
-  protected modalInstanceTitle: string;
-  protected modalInstanceClass: string;
+  public modalInstanceTitle: string;
+  public modalInstanceClass: string;
 
   // default instance buttons
 
-  protected instanceButtons = {
+  public instanceButtons = {
     ok: null,
     cancel: null,
     yes: null,

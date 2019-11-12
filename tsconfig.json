@@ -19,12 +19,12 @@
     ],
     "paths": {
       "ngx-modals": [
-        "dist/modals",
-        "dist/modals"
+        "dist/ngx-modals",
+        "dist/ngx-modals"
       ],
       "ngx-modals/*": [
-        "dist/modals/*",
-        "dist/modals/*"
+        "dist/ngx-modals/*",
+        "dist/ngx-modals/*"
       ]
     }
   }

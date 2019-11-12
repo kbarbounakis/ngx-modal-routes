@@ -1,13 +1,13 @@
 import {Component, Input, ViewChild, OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RouterModalOkCancel } from '../../../projects/modals/src/public_api';
+import { RouterModalOkCancel } from '../../../../modals/src/public_api';
 import {FormioComponent, FormioForm} from 'angular-formio';
 
 import EDIT_FORM from './edit1.json';
 
 @Component({
-  selector: 'app-edit1',
+  selector: 'demo-edit1',
   template: `<formio [form]="formData" (change)="onChange($event)" [refresh]="refreshForm"  #form></formio>`,
   styles: [`
   `]
