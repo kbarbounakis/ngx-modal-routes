@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterModalOkCancel } from '../router-modal.component';
+import { RouterModalOkCancel } from '../../../projects/modals/src/public_api';
 import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   selector: 'modal2',
@@ -8,14 +8,12 @@ import {ActivatedRoute, Router} from '@angular/router';
   `]
 })
 export class Modal2Component extends RouterModalOkCancel {
-  //
-  @Input('modalTitle') modalTitle: string;
 
-  public okButtonText = "Proceed";
-  public okButtonClass = "btn btn-indigo";
+  public okButtonText = 'Proceed';
+  public okButtonClass = 'btn btn-indigo';
 
-  public cancelButtonText = "Dismiss";
-  public cancelButtonClass = "btn btn-gray-100";
+  public cancelButtonText = 'Dismiss';
+  public cancelButtonClass = 'btn btn-gray-100';
 
   constructor(private _router: Router) {
     super();
@@ -23,11 +21,11 @@ export class Modal2Component extends RouterModalOkCancel {
 
 
   async ok() {
-    return this._router.navigate(['/hello']); 
+    return this._router.navigate(['/hello']);
   }
 
   async cancel() {
-    return this._router.navigate(['/hello']); 
+    return this._router.navigate(['/hello']);
   }
 
 

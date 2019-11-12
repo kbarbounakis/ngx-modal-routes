@@ -11,9 +11,9 @@ import { Modal2Component } from './components/modal2.component';
 import { Modal3Component } from './components/modal3.component';
 import { Edit1Component } from './components/edit1.component';
 import { AppRoutingModule } from './app.routing';
-import { RouterModalComponent } from './router-modal.component';
 
 import { AppLayoutComponent } from './app-layout.component';
+import {RouterModalModule} from '../../projects/modals/src/lib/router-modal.module';
 
 @NgModule({
   imports: [
@@ -21,12 +21,12 @@ import { AppLayoutComponent } from './app-layout.component';
     CommonModule,
     FormsModule,
     FormioModule,
+    RouterModalModule,
     AppRoutingModule
   ],
-  declarations: [ 
+  declarations: [
     AppComponent,
-    RouterModalComponent,
-    HelloComponent, 
+    HelloComponent,
     AppLayoutComponent,
     Modal1Component,
     Modal2Component,

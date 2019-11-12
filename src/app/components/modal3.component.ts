@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterModalYesNo } from '../router-modal.component';
+import { RouterModalYesNo } from '../../../projects/modals/src/public_api';
 import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   selector: 'modal2',
@@ -9,20 +9,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class Modal3Component extends RouterModalYesNo {
   //
-  @Input('modalTitle') modalTitle = "Yes/No Message";
+  @Input('modalTitle') modalTitle = 'Yes/No Message';
 
-  public yesButtonText = "Yes, I agree";
+  public yesButtonText = 'Yes, I agree';
 
   constructor(private _router: Router) {
     super();
   }
 
   async no() {
-    return this._router.navigate(['/hello']); 
+    return this._router.navigate(['/hello']);
   }
 
   async yes() {
-    return this._router.navigate(['/hello']); 
+    return this._router.navigate(['/hello']);
   }
 
 

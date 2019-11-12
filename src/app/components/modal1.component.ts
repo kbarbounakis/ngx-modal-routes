@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RouterModalOutletComponent} from '../router-modal.component';
 import {NgForm} from '@angular/forms';
 import { Subscription } from 'rxjs';
 @Component({
@@ -11,21 +10,21 @@ import { Subscription } from 'rxjs';
 })
 export class Modal1Component implements OnInit, OnDestroy {
   public parentRoute: any;
-  public modalTitle  = "A modal window as route";
-  public modalClass = "modal-xl";
-  public okButtonText = "Continue";
+  public modalTitle  = 'A modal window as route';
+  public modalClass = 'modal-xl';
+  public okButtonText = 'Continue';
   public statusChangesSubscription: Subscription;
   public readonly statusChanges = new EventEmitter<any>();
 
   @ViewChild('form', {
     static: true
-  }) form : NgForm;
+  }) form: NgForm;
 
   public model = {
     email: null,
-    password:null,
+    password: null,
     checkMeOut: true
-  }
+  };
   //
   constructor(private _router: Router, private _activatedRoute: ActivatedRoute) {
       this.parentRoute = this._activatedRoute.parent;
@@ -50,7 +49,7 @@ export class Modal1Component implements OnInit, OnDestroy {
 
 
   cancel() {
-    return this._router.navigate(['/hello']); 
+    return this._router.navigate(['/hello']);
   }
 
   ok() {
@@ -59,7 +58,7 @@ export class Modal1Component implements OnInit, OnDestroy {
       setTimeout(() => {
         return this._router.navigate(['/hello']).then(() => {
           return resolve();
-        }); 
+        });
       }, 5000);
     });
   }

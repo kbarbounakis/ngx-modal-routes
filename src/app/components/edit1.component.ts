@@ -1,8 +1,8 @@
 import {Component, Input, ViewChild, OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RouterModalOkCancel } from '../router-modal.component';
-import {FormioComponent, FormioForm} from "angular-formio";
+import { RouterModalOkCancel } from '../../../projects/modals/src/public_api';
+import {FormioComponent, FormioForm} from 'angular-formio';
 
 import EDIT_FORM from './edit1.json';
 
@@ -16,7 +16,7 @@ export class Edit1Component extends RouterModalOkCancel implements OnInit, OnDes
 
   @Input('formData') formData: any;
 
-  public modalTitle = "A modal window as route";
+  public modalTitle = 'A modal window as route';
 
   @ViewChild('form', {
     static: true
@@ -32,7 +32,7 @@ export class Edit1Component extends RouterModalOkCancel implements OnInit, OnDes
 
   async ngOnInit() {
     const findButton = EDIT_FORM.components.find( component => {
-      return component.type === "button" && component.label === "Submit";
+      return component.type === 'button' && component.label === 'Submit';
     });
     if (findButton) {
       findButton.hidden = true;

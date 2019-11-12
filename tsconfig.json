@@ -16,6 +16,16 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-modals": [
+        "dist/modals",
+        "dist/modals"
+      ],
+      "ngx-modals/*": [
+        "dist/modals/*",
+        "dist/modals/*"
+      ]
+    }
   }
-  }
+}

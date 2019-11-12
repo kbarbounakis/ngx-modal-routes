@@ -52,9 +52,9 @@ export abstract class RouterModalOkCancel {
   @Input() okButtonClass = ButtonTypes.ok.buttonClass;
   @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
   @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
+  public readonly statusChanges = new EventEmitter<any>();
   abstract ok(): Promise<any>;
   abstract cancel(): Promise<any>;
-  public readonly statusChanges = new EventEmitter<any>();
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -65,10 +65,10 @@ export abstract class RouterModalYesNoCancel {
   @Input() noButtonClass = ButtonTypes.ignore.buttonClass;
   @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
   @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
+  public readonly statusChanges = new EventEmitter<any>();
   abstract yes(): Promise<any>;
   abstract no(): Promise<any>;
   abstract cancel(): Promise<any>;
-  public readonly statusChanges = new EventEmitter<any>();
 }
 
 export abstract class RouterModalYesNo {
@@ -76,12 +76,13 @@ export abstract class RouterModalYesNo {
   @Input() yesButtonClass = ButtonTypes.yes.buttonClass;
   @Input() noButtonText = ButtonTypes.no.buttonText;
   @Input() noButtonClass = ButtonTypes.no.buttonClass;
+  public readonly statusChanges = new EventEmitter<any>();
   abstract yes(): Promise<any>;
   abstract no(): Promise<any>;
-  public readonly statusChanges = new EventEmitter<any>();
 }
 
 export abstract class RouterModalAbortRetryIgnore {
+  public readonly statusChanges = new EventEmitter<any>();
   @Input() abortButtonText = ButtonTypes.abort.buttonText;
   @Input() abortButtonClass = ButtonTypes.abort.buttonClass;
   @Input() retryButtonText = ButtonTypes.retry.buttonText;
@@ -92,10 +93,10 @@ export abstract class RouterModalAbortRetryIgnore {
   abstract abort(): Promise<any>;
   abstract retry(): Promise<any>;
   abstract ignore(): Promise<any>;
-  public readonly statusChanges = new EventEmitter<any>();
 }
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'router-modal',
   template: `
   <div class="bd-modal d-none">
@@ -105,24 +106,29 @@ export abstract class RouterModalAbortRetryIgnore {
       <div class="modal-content">
         <div class="modal-header" *ngIf="modalInstanceTitle">
           <h5 class="modal-title">{{modalInstanceTitle}}</h5>
-          <button *ngIf="instanceButtons.cancel" [disabled]="waiting || instanceButtons.cancel.buttonDisabled" (click)="cancel()" type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+          <button *ngIf="instanceButtons.cancel" [disabled]="waiting || instanceButtons.cancel.buttonDisabled" (click)="cancel()"
+                  type="button" class="close" data-dismiss="modal" aria-label="Cancel">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <router-outlet (activate)="onActivate($event)" (deactivate)="onDeactivate($event)" name="modal"></router-outlet>  
+          <router-outlet (activate)="onActivate($event)" (deactivate)="onDeactivate($event)" name="modal"></router-outlet>
         </div>
         <div class="modal-footer justify-content-end">
-          <button *ngIf="instanceButtons.ok" [disabled]="waiting || instanceButtons.ok.buttonDisabled" (click)="ok()" type="button" [ngClass]="instanceButtons.ok.buttonClass">
+          <button *ngIf="instanceButtons.ok" [disabled]="waiting || instanceButtons.ok.buttonDisabled" (click)="ok()"
+                  type="button" [ngClass]="instanceButtons.ok.buttonClass">
             {{instanceButtons.ok.buttonText}}
           </button>
-          <button *ngIf="instanceButtons.yes" [disabled]="waiting || instanceButtons.yes.buttonDisabled" (click)="yes()" type="button" [ngClass]="instanceButtons.yes.buttonClass">
+          <button *ngIf="instanceButtons.yes" [disabled]="waiting || instanceButtons.yes.buttonDisabled"
+                  (click)="yes()" type="button" [ngClass]="instanceButtons.yes.buttonClass">
             {{instanceButtons.yes.buttonText}}
           </button>
-          <button *ngIf="instanceButtons.no" [disabled]="waiting || instanceButtons.no.buttonDisabled" (click)="no()" type="button" [ngClass]="instanceButtons.no.buttonClass">
+          <button *ngIf="instanceButtons.no" [disabled]="waiting || instanceButtons.no.buttonDisabled"
+                  (click)="no()" type="button" [ngClass]="instanceButtons.no.buttonClass">
             {{instanceButtons.no.buttonText}}
           </button>
-          <button *ngIf="instanceButtons.cancel" [disabled]="waiting || instanceButtons.cancel.buttonDisabled" (click)="cancel()" type="button" [ngClass]="instanceButtons.cancel.buttonClass" data-dismiss="modal">
+          <button *ngIf="instanceButtons.cancel" [disabled]="waiting || instanceButtons.cancel.buttonDisabled"
+                  (click)="cancel()" type="button" [ngClass]="instanceButtons.cancel.buttonClass" data-dismiss="modal">
             {{instanceButtons.cancel.buttonText}}
           </button>
         </div>
@@ -156,12 +162,12 @@ export class RouterModalComponent {
   private waiting = false;
   @Input() modalTitle = '';
   @Input() modalClass: string;
-  
+
   // this properties are here as inputs in order to have a way to customize text and class of each button
 
   @Input() okButtonText = ButtonTypes.ok.buttonText;
   @Input() okButtonClass = ButtonTypes.ok.buttonClass;
-  
+
   @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
   @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
 
@@ -194,7 +200,7 @@ export class RouterModalComponent {
     retry: null,
     ignore: null
   };
-  
+
   constructor(private _element: ElementRef,
             private _activatedRoute: ActivatedRoute,
             private _router: Router) {
@@ -204,22 +210,20 @@ export class RouterModalComponent {
   async cancel() {
     try {
       if (this.componentReference) {
-        
+
         // set waiting
         this.waiting = true;
         // if component has cancel() method
         if (typeof this.componentReference.cancel === 'function') {
           // do cancel
           await this.componentReference.cancel();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -232,15 +236,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.ok === 'function') {
           // do submit
           await this.componentReference.ok();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -253,15 +255,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.abort === 'function') {
           // do submit
           await this.componentReference.abort();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -274,15 +274,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.retry === 'function') {
           // do submit
           await this.componentReference.retry();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -295,15 +293,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.ignore === 'function') {
           // do submit
           await this.componentReference.ignore();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -316,15 +312,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.yes === 'function') {
           // do submit
           await this.componentReference.yes();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -337,15 +331,13 @@ export class RouterModalComponent {
         if (typeof this.componentReference.no === 'function') {
           // do submit
           await this.componentReference.no();
-        }
-        else {
+        } else {
           await this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
         // unset waiting
         this.waiting = false;
       }
-    }
-    catch(err) {
+    } catch (err) {
       this.waiting = false;
     }
   }
@@ -375,7 +367,7 @@ export class RouterModalComponent {
       this.modalInstanceClass = outletComponentReference.modalClass;
       // hold this to validate buttons
       let hasAtLeastOneButton = false;
-      this.instanceButtons = { 
+      this.instanceButtons = {
         ok: null,
         cancel: null,
         yes: null,
@@ -394,16 +386,14 @@ export class RouterModalComponent {
           const buttonTextProperty = `${key}ButtonText`;
           if (this.componentReference.hasOwnProperty(buttonTextProperty)) {
             this.instanceButtons[key].buttonText = this.componentReference[buttonTextProperty];
-          }
-          else {
+          } else {
             // get property from this component
             this.instanceButtons[key].buttonText = this[buttonTextProperty];
           }
           const buttonClassProperty = `${key}ButtonClass`;
           if (this.componentReference.hasOwnProperty(buttonClassProperty)) {
             this.instanceButtons[key].buttonClass = this.componentReference[buttonClassProperty];
-          }
-          else {
+          } else {
             // get property from this component
             this.instanceButtons[key].buttonClass = this[buttonClassProperty];
           }
