@@ -6,22 +6,22 @@ import {Subscription} from 'rxjs';
 export const ButtonTypes = {
     ok: {
       buttonText: 'OK',
-      buttonClass: 'btn btn-indigo',
+      buttonClass: 'btn btn-primary',
       buttonDisabled: false
     },
     cancel: {
       buttonText: 'Cancel',
-      buttonClass: 'btn btn-gray-100',
+      buttonClass: 'btn btn-default',
       buttonDisabled: false
     },
     yes: {
       buttonText: 'Yes',
-      buttonClass: 'btn btn-indigo',
+      buttonClass: 'btn btn-primary',
       buttonDisabled: false
     },
     no: {
       buttonText: 'No',
-      buttonClass: 'btn btn-gray-100',
+      buttonClass: 'btn btn-default',
       buttonDisabled: false
     },
     abort: {

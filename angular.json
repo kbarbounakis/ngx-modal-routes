@@ -27,7 +27,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@universis/theme/css/universis.css",
+              "node_modules/bootstrap/scss/bootstrap.scss",
               "projects/demo/src/styles.scss"
             ],
             "scripts": []
