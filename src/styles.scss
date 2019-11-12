@@ -1,0 +1,17 @@
+/* Add application styles & imports to this file! */
+
+.bd-modal1 {
+  .modal {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    z-index: 10000;
+    display: block;
+      .modal-body {
+            margin-top: 0rem;
+            margin-bottom: 0rem;
+      }
+    }
+  }

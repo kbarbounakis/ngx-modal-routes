@@ -1,0 +1,19 @@
+<div>
+  <p>Modal body text goes here!</p>
+  <form #form="ngForm" novalidate>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input [required]="true" [(ngModel)]="model.email" type="email" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input [required]="true" [(ngModel)]="model.password" type="password" class="form-control" id="exampleInputPassword1" name="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-check">
+      <input [(ngModel)]="model.checkMeOut"  type="checkbox" class="form-check-input" id="exampleCheck1" name="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+  </form>
+</div>
+
