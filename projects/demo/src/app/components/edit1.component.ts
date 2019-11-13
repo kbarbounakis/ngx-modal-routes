@@ -1,8 +1,7 @@
 import {Component, Input, ViewChild, OnInit, OnDestroy, EventEmitter, Output} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RouterModalOkCancel } from '../../../../modals/src/public_api';
-import {FormioComponent, FormioForm} from 'angular-formio';
+import {FormioComponent} from 'angular-formio';
 
 import EDIT_FORM from './edit1.json';
 
@@ -26,8 +25,8 @@ export class Edit1Component extends RouterModalOkCancel implements OnInit, OnDes
 
   public readonly statusChanges = new EventEmitter<any>();
 
-  constructor(private _router: Router) {
-    super();
+  constructor(router: Router, activatedRoute: ActivatedRoute) {
+    super(router, activatedRoute);
   }
 
   async ngOnInit() {
@@ -47,18 +46,19 @@ export class Edit1Component extends RouterModalOkCancel implements OnInit, OnDes
     //
   }
 
-  onChange(event) {
+  onChange(event: any) {
     this.statusChanges.emit({
       invalid: !event.isValid
     });
   }
 
   ok() {
-    return this._router.navigate(['/hello']);
+      // do something and close
+    return this.close();
   }
 
   cancel() {
-    return this._router.navigate(['/hello']);
+    return this.close();
   }
 
 }

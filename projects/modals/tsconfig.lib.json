@@ -13,8 +13,9 @@
     "importHelpers": true,
     "types": [],
     "lib": [
-      "dom",
-      "es2018"
+        "es6",
+        "dom",
+        "es2018"
     ]
   },
   "angularCompilerOptions": {

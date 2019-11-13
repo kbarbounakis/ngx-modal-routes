@@ -48,6 +48,11 @@ export declare interface RouterModalOutletComponent {
 }
 
 export class RouterModal {
+
+    constructor(protected router: Router, protected activatedRoute: ActivatedRoute) {
+        //
+    }
+
     private _modalTitle: string;
     public readonly modalTitleChanges = new EventEmitter<any>();
     private _modalClass: string;
@@ -61,15 +66,28 @@ export class RouterModal {
       this.modalTitleChanges.emit(this._modalTitle);
     }
 
-  @Input()
-  get modalClass(): string {
-    return this._modalClass;
-  }
-  set modalClass(value: string) {
-    this._modalClass = value;
-    this.modalClassChanges.emit(this._modalTitle);
-  }
+    @Input()
+    get modalClass(): string {
+        return this._modalClass;
+    }
+    set modalClass(value: string) {
+        this._modalClass = value;
+        this.modalClassChanges.emit(this._modalTitle);
+    }
     public readonly statusChanges = new EventEmitter<any>();
+
+    public close() {
+        return this.router.navigate([
+            { 
+                outlets: { 
+                    modal: null
+                    } 
+                }
+            ], {
+                relativeTo: this.activatedRoute.parent
+            });
+        }
+
 }
 
 export abstract class RouterModalOkCancel extends RouterModal {
@@ -370,6 +388,7 @@ export class RouterModalComponent {
     this.componentReference = event;
     // get router outlet component
     if (this.componentReference) {
+
       if (this.componentReference.statusChanges) {
           // get status changes
           this.componentStatusChanges = this.componentReference.statusChanges.subscribe( status => {
