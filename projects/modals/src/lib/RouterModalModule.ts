@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModalComponent } from './router-modal.component';
+import { RouterModalComponent } from './RouterModalComponent';
 import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';

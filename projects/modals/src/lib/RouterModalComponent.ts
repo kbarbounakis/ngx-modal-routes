@@ -1,138 +1,13 @@
 import { Component, Input, ElementRef, ViewEncapsulation, EventEmitter } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-
-
-export const ButtonTypes = {
-    ok: {
-      buttonText: 'OK',
-      buttonClass: 'btn btn-primary',
-      buttonDisabled: false
-    },
-    cancel: {
-      buttonText: 'Cancel',
-      buttonClass: 'btn btn-default',
-      buttonDisabled: false
-    },
-    yes: {
-      buttonText: 'Yes',
-      buttonClass: 'btn btn-primary',
-      buttonDisabled: false
-    },
-    no: {
-      buttonText: 'No',
-      buttonClass: 'btn btn-default',
-      buttonDisabled: false
-    },
-    abort: {
-      buttonText: 'Abort',
-      buttonClass: 'btn btn-danger',
-      buttonDisabled: false
-    },
-    retry: {
-      buttonText: 'Retry',
-      buttonClass: 'btn btn-primary',
-      buttonDisabled: false
-    },
-    ignore: {
-      buttonText: 'Ignore',
-      buttonClass: 'btn btn-warning',
-      buttonDisabled: false
-    }
-  };
+import { ButtonTypes, ButtonType } from './ButtonTypes';
+import { ModalChanges } from './RouterModal';
 
 export declare interface RouterModalOutletComponent {
   modalTitle: string;
   modalClass: string;
   statusChanges: EventEmitter<any>;
-}
-
-export class RouterModal {
-
-    constructor(protected router: Router, protected activatedRoute: ActivatedRoute) {
-        //
-    }
-
-    private _modalTitle: string;
-    public readonly modalTitleChanges = new EventEmitter<any>();
-    private _modalClass: string;
-    public readonly modalClassChanges = new EventEmitter<any>();
-    @Input()
-    get modalTitle(): string {
-      return this._modalTitle;
-    }
-    set modalTitle(value: string) {
-      this._modalTitle = value;
-      this.modalTitleChanges.emit(this._modalTitle);
-    }
-
-    @Input()
-    get modalClass(): string {
-        return this._modalClass;
-    }
-    set modalClass(value: string) {
-        this._modalClass = value;
-        this.modalClassChanges.emit(this._modalTitle);
-    }
-    public readonly statusChanges = new EventEmitter<any>();
-
-    public close() {
-        return this.router.navigate([
-            { 
-                outlets: { 
-                    modal: null
-                    } 
-                }
-            ], {
-                relativeTo: this.activatedRoute.parent
-            });
-        }
-
-}
-
-export abstract class RouterModalOkCancel extends RouterModal {
-  @Input() okButtonText = ButtonTypes.ok.buttonText;
-  @Input() okButtonClass = ButtonTypes.ok.buttonClass;
-  @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
-  @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
-  abstract ok(): Promise<any>;
-  abstract cancel(): Promise<any>;
-}
-
-// noinspection JSUnusedGlobalSymbols
-export abstract class RouterModalYesNoCancel extends RouterModal {
-  @Input() yesButtonText = ButtonTypes.yes.buttonText;
-  @Input() yesButtonClass = ButtonTypes.yes.buttonClass;
-  @Input() noButtonText = ButtonTypes.no.buttonText;
-  @Input() noButtonClass = ButtonTypes.ignore.buttonClass;
-  @Input() cancelButtonText = ButtonTypes.cancel.buttonText;
-  @Input() cancelButtonClass = ButtonTypes.cancel.buttonClass;
-  abstract yes(): Promise<any>;
-  abstract no(): Promise<any>;
-  abstract cancel(): Promise<any>;
-}
-
-export abstract class RouterModalYesNo extends RouterModal {
-  @Input() yesButtonText = ButtonTypes.yes.buttonText;
-  @Input() yesButtonClass = ButtonTypes.yes.buttonClass;
-  @Input() noButtonText = ButtonTypes.no.buttonText;
-  @Input() noButtonClass = ButtonTypes.no.buttonClass;
-  abstract yes(): Promise<any>;
-  abstract no(): Promise<any>;
-}
-
-export abstract class RouterModalAbortRetryIgnore extends RouterModal {
-  public readonly statusChanges = new EventEmitter<any>();
-  @Input() abortButtonText = ButtonTypes.abort.buttonText;
-  @Input() abortButtonClass = ButtonTypes.abort.buttonClass;
-  @Input() retryButtonText = ButtonTypes.retry.buttonText;
-  @Input() retryButtonClass = ButtonTypes.retry.buttonClass;
-  @Input() ignoreButtonText = ButtonTypes.ignore.buttonText;
-  @Input() ignoreButtonClass = ButtonTypes.ignore.buttonClass;
-  // noinspection JSUnusedGlobalSymbols
-  abstract abort(): Promise<any>;
-  abstract retry(): Promise<any>;
-  abstract ignore(): Promise<any>;
 }
 
 @Component({
@@ -198,9 +73,8 @@ export abstract class RouterModalAbortRetryIgnore extends RouterModal {
 export class RouterModalComponent {
 
   private componentReference: any;
-  private componentStatusChanges: Subscription;
-  private componentTitleChanges: Subscription;
-  private componentClassChanges: Subscription;
+  private componentModalChanges: Subscription;
+  private componentButtonChanges: Subscription;
   public waiting = false;
   @Input() modalTitle = '';
   @Input() modalClass: string;
@@ -389,34 +263,29 @@ export class RouterModalComponent {
     // get router outlet component
     if (this.componentReference) {
 
-      if (this.componentReference.statusChanges) {
-          // get status changes
-          this.componentStatusChanges = this.componentReference.statusChanges.subscribe( status => {
-              // validate ok status
-              if (this.instanceButtons.ok) {
-                this.instanceButtons.ok.buttonDisabled = status.invalid;
-              }
-              // validate yes status
-              if (this.instanceButtons.yes) {
-                this.instanceButtons.yes.buttonDisabled = status.invalid;
+        if (this.componentReference.buttonChanges) {
+            // subscribe for any button changes
+            this.componentButtonChanges = this.componentReference.buttonChanges.subscribe( (buttonChange: { [ button: string]: ButtonType }) => {
+                if (buttonChange) {
+                    // assign button changes
+                    Object.assign(this.instanceButtons, buttonChange);
+                }
+            });
+        }
+
+      if (this.componentReference.modalChanges) {
+          // get modal changes
+          this.componentModalChanges = this.componentReference.modalChanges.subscribe( (modalChanges: ModalChanges) => {
+              this.modalInstanceTitle = modalChanges.modalTitle;
+              if (modalChanges.modalClass) {
+                  this.modalInstanceClass = modalChanges.modalClass;
               }
           });
       }
-      if (this.componentReference.modalTitleChanges) {
-        this.componentTitleChanges = this.componentReference.modalTitleChanges.subscribe( title => {
-          this.modalInstanceTitle = title;
-        });
-      }
-      if (this.componentReference.modalClassChanges) {
-        this.componentClassChanges = this.componentReference.modalClassChanges.subscribe( title => {
-          this.modalInstanceClass = title;
-        });
-      }
-      const outletComponentReference = (<RouterModalOutletComponent> this.componentReference);
       // get title
-      this.modalInstanceTitle = outletComponentReference.modalTitle;
+      this.modalInstanceTitle = this.componentReference.modalTitle;
       // get class
-      this.modalInstanceClass = outletComponentReference.modalClass;
+      this.modalInstanceClass = this.componentReference.modalClass;
       // hold this to validate buttons
       let hasAtLeastOneButton = false;
       this.instanceButtons = {
@@ -469,14 +338,13 @@ export class RouterModalComponent {
 
   // noinspection JSUnusedLocalSymbols
   onDeactivate(event) {
-    if (this.componentTitleChanges) {
-      this.componentTitleChanges.unsubscribe();
+    if (this.componentModalChanges) {
+      this.componentModalChanges.unsubscribe();
+      this.componentModalChanges = null;
     }
-    if (this.componentClassChanges) {
-      this.componentClassChanges.unsubscribe();
-    }
-    if (this.componentStatusChanges) {
-      this.componentStatusChanges.unsubscribe();
+    if (this.componentButtonChanges) {
+      this.componentButtonChanges.unsubscribe();
+      this.componentButtonChanges = null;
     }
     // restore properties
     this.modalInstanceTitle = this.modalTitle;

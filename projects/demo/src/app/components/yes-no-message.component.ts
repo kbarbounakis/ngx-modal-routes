@@ -25,6 +25,9 @@ export class YesNoMessageComponent extends RouterModalYesNo implements OnInit, O
         this.subscription = this.activatedRoute.data.subscribe( data => {
             this.yesButtonText = data.yesButtonText;
         });
+        setTimeout(()=> {
+            this.yesButtonDisabled = true;
+        }, 5000);
     }
   //
   @Input() modalTitle = 'A Yes/No Message';
